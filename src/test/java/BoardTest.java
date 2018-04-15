@@ -149,4 +149,59 @@ class BoardTest {
 		board = new Board(3, 3, 0);
 		assertThat(board.getNeighboursOf(3, 3).size(), is(3));
 	}
+
+	@Test
+	void cellHasOneNeighbouringPit() {
+		board = new Board(2, 1, 1);
+		board.getCellAt(1, 1).setProperty("pit");
+		board.getCellAt(2, 1).setProperty("0");
+		assertThat(board.getNumberOfAdjacentPits(2, 1), is(1));
+	}
+
+	@Test
+	void cellHasTwoNeighbouringPits() {
+		board = new Board(2, 2, 2);
+		board.getCellAt(1, 1).setProperty("pit");
+		board.getCellAt(1, 2).setProperty("pit");
+		board.getCellAt(2, 1).setProperty("0");
+		board.getCellAt(2, 2).setProperty("0");
+		assertThat(board.getNumberOfAdjacentPits(2, 1), is(2));
+	}
+
+	@Test
+	void cellHasEightNeighbouringPits() {
+		board = new Board(3, 3, 8);
+		board.getCellAt(1, 1).setProperty("pit");
+		board.getCellAt(1, 2).setProperty("pit");
+		board.getCellAt(1, 3).setProperty("pit");
+		board.getCellAt(2, 1).setProperty("pit");
+		board.getCellAt(2, 2).setProperty("0");
+		board.getCellAt(2, 3).setProperty("pit");
+		board.getCellAt(3, 1).setProperty("pit");
+		board.getCellAt(3, 2).setProperty("pit");
+		board.getCellAt(3, 3).setProperty("pit");
+		assertThat(board.getNumberOfAdjacentPits(2, 2), is(8));
+	}
+
+	@Test
+	void cellHasFourNeighbouringPits() {
+		board = new Board(3, 3, 8);
+		board.getCellAt(1, 1).setProperty("pit");
+		board.getCellAt(1, 2).setProperty("0");
+		board.getCellAt(1, 3).setProperty("pit");
+		board.getCellAt(2, 1).setProperty("0");
+		board.getCellAt(2, 2).setProperty("0");
+		board.getCellAt(2, 3).setProperty("");
+		board.getCellAt(3, 1).setProperty("pit");
+		board.getCellAt(3, 2).setProperty("0");
+		board.getCellAt(3, 3).setProperty("pit");
+		assertThat(board.getNumberOfAdjacentPits(2, 2), is(4));
+	}
+
+	@Test
+	void cellHasNoNeighbouringPits() {
+		board = new Board(3, 3, 0);
+		assertThat(board.getNumberOfAdjacentPits(2, 2), is(0));
+	}
+
 }

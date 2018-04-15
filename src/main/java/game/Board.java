@@ -113,4 +113,14 @@ public class Board {
 		}
 		return neighbours;
 	}
+
+	public int getNumberOfAdjacentPits(int x, int y) {
+		short count = 0;
+		for (Cell nb : getNeighboursOf(x, y)) {
+			if (nb.getProperty() == CellProperty.PIT) {
+				count++;
+			}
+		}
+		return count;
+	}
 }
