@@ -1,7 +1,6 @@
 package game;
 
-import helpers.CellProperty;
-import helpers.Coordinates;
+import helpers.*;
 
 import java.util.*;
 
@@ -66,15 +65,15 @@ public class Board {
 		return cells;
 	}
 
-	public CellProperty getPropertyAt(int x, int y) {
-		Cell cell = getCellAt(x, y);
+	public CellProperty getPropertyAt(Coordinates coordinates) {
+		Cell cell = getCellAt(coordinates);
 		return cell.getProperty();
 	}
 
-	public Cell getCellAt(int x, int y) {
+	public Cell getCellAt(Coordinates coordinates) {
 		Cell targetCell = null;
 		for (Cell cell : cells) {
-			if (cell.getCoordinates().equals(new Coordinates(x, y))) {
+			if (cell.getCoordinates().equals(coordinates)) {
 				targetCell = cell;
 				break;
 			}
@@ -82,45 +81,71 @@ public class Board {
 		return targetCell;
 	}
 
-	public List<Cell> getNeighboursOf(int x, int y) {
+	public List<Cell> getNeighboursOf(Coordinates coordinates) {
 		List<Cell> neighbours = new ArrayList<Cell>();
 		//top row
+		int x = coordinates.getX();
+		int y = coordinates.getY();
 		if (y > 1) {
 			if (x > 1) {
-				neighbours.add(getCellAt(x - 1, y - 1));
+				neighbours.add(getCellAt(new Coordinates(x - 1, y - 1)));
 			}
-			neighbours.add(getCellAt(x, y - 1));
+			neighbours.add(getCellAt(new Coordinates(x, y - 1)));
 			if (x < width) {
-				neighbours.add(getCellAt(x + 1, y - 1));
+				neighbours.add(getCellAt(new Coordinates(x + 1, y - 1)));
 			}
 		}
 		//middle row
 		if (x > 1) {
-			neighbours.add(getCellAt(x - 1, y));
+			neighbours.add(getCellAt(new Coordinates(x - 1, y)));
 		}
 		if (x < width) {
-			neighbours.add(getCellAt(x + 1, y));
+			neighbours.add(getCellAt(new Coordinates(x + 1, y)));
 		}
 		//bottom row
 		if (y < height) {
 			if (x > 1) {
-				neighbours.add(getCellAt(x - 1, y + 1));
+				neighbours.add(getCellAt(new Coordinates(x - 1, y + 1)));
 			}
-			neighbours.add(getCellAt(x, y + 1));
+			neighbours.add(getCellAt(new Coordinates(x, y + 1)));
 			if (x < width) {
-				neighbours.add(getCellAt(x + 1, y + 1));
+				neighbours.add(getCellAt(new Coordinates(x + 1, y + 1)));
 			}
 		}
 		return neighbours;
 	}
 
-	public int getNumberOfAdjacentPits(int x, int y) {
+	public int getNumberOfAdjacentPits(Coordinates coordinates) {
 		short count = 0;
-		for (Cell nb : getNeighboursOf(x, y)) {
+		for (Cell nb : getNeighboursOf(coordinates)) {
 			if (nb.getProperty() == CellProperty.PIT) {
 				count++;
 			}
 		}
 		return count;
+	}
+
+	public void open(Coordinates coordinates) {
+		System.out.println("opening " + coordinates.getX() + ", " + coordinates.getY());
+		getCellAt(coordinates).setStatus("open");
+		if (getNumberOfAdjacentPits(coordinates) == 0 && getCellAt(coordinates).getProperty() != CellProperty.PIT) {
+			for (Cell nb : getNeighboursOf(coordinates)) {
+				System.out.println("checking " + nb.getCoordinates().toString());
+				if ((nb.getStatus() == CellStatus.OPEN)) {
+					break;
+				}
+				open(nb.getCoordinates());
+			}
+		}
+	}
+
+	public int countNumberOfOpenCells() {
+		int numberOfOpenCells = 0;
+		for (Cell cell : getCells()) {
+			if (cell.getStatus() == CellStatus.OPEN) {
+				numberOfOpenCells++;
+			}
+		}
+		return numberOfOpenCells;
 	}
 }

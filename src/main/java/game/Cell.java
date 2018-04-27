@@ -1,7 +1,6 @@
 package game;
 
-import helpers.CellProperty;
-import helpers.Coordinates;
+import helpers.*;
 
 /***************************************
  * Created by regula on 11.04.18.
@@ -9,6 +8,7 @@ import helpers.Coordinates;
 public class Cell {
 	private CellProperty property;
 	private Coordinates coordinates = new Coordinates();
+	private CellStatus status;
 
 	public Cell() {
 		setCoordinates(1, 1);
@@ -41,4 +41,12 @@ public class Cell {
 		return coordinates;
 	}
 
+	CellStatus getStatus() {
+		return status;
+	}
+
+	void setStatus(String status) {
+		this.status = CellStatus.OPEN;
+
+	}
 }
