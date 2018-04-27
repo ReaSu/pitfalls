@@ -83,30 +83,32 @@ public class Board {
 
 	public List<Cell> getNeighboursOf(Coordinates coordinates) {
 		List<Cell> neighbours = new ArrayList<Cell>();
-		int x = coordinates.getX();
-		int y = coordinates.getY();
-		neighbours.addAll(topRow(x, y));
-		neighbours.addAll(middleRow(x, y));
-		neighbours.addAll(bottomRow(x, y));
+		neighbours.addAll(topRow(coordinates));
+		neighbours.addAll(middleRow(coordinates));
+		neighbours.addAll(bottomRow(coordinates));
 		return neighbours;
 	}
 
-	private List<Cell> bottomRow(int x, int y) {
+	private List<Cell> topRow(Coordinates coordinates) {
 		List<Cell> neighbours = new ArrayList<Cell>();
-		if (y < height) {
+		int x = coordinates.getX();
+		int y = coordinates.getY();
+		if (y > 1) {
 			if (x > 1) {
-				neighbours.add(getCellAt(new Coordinates(x - 1, y + 1)));
+				neighbours.add(getCellAt(new Coordinates(x - 1, y - 1)));
 			}
-			neighbours.add(getCellAt(new Coordinates(x, y + 1)));
+			neighbours.add(getCellAt(new Coordinates(x, y - 1)));
 			if (x < width) {
-				neighbours.add(getCellAt(new Coordinates(x + 1, y + 1)));
+				neighbours.add(getCellAt(new Coordinates(x + 1, y - 1)));
 			}
 		}
 		return neighbours;
 	}
 
-	private List<Cell> middleRow(int x, int y) {
+	private List<Cell> middleRow(Coordinates coordinates) {
 		List<Cell> neighbours = new ArrayList<Cell>();
+		int x = coordinates.getX();
+		int y = coordinates.getY();
 		if (x > 1) {
 			neighbours.add(getCellAt(new Coordinates(x - 1, y)));
 		}
@@ -116,15 +118,17 @@ public class Board {
 		return neighbours;
 	}
 
-	private List<Cell> topRow(int x, int y) {
+	private List<Cell> bottomRow(Coordinates coordinates) {
 		List<Cell> neighbours = new ArrayList<Cell>();
-		if (y > 1) {
+		int x = coordinates.getX();
+		int y = coordinates.getY();
+		if (y < height) {
 			if (x > 1) {
-				neighbours.add(getCellAt(new Coordinates(x - 1, y - 1)));
+				neighbours.add(getCellAt(new Coordinates(x - 1, y + 1)));
 			}
-			neighbours.add(getCellAt(new Coordinates(x, y - 1)));
+			neighbours.add(getCellAt(new Coordinates(x, y + 1)));
 			if (x < width) {
-				neighbours.add(getCellAt(new Coordinates(x + 1, y - 1)));
+				neighbours.add(getCellAt(new Coordinates(x + 1, y + 1)));
 			}
 		}
 		return neighbours;
