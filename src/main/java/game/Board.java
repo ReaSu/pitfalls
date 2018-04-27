@@ -83,26 +83,16 @@ public class Board {
 
 	public List<Cell> getNeighboursOf(Coordinates coordinates) {
 		List<Cell> neighbours = new ArrayList<Cell>();
-		//top row
 		int x = coordinates.getX();
 		int y = coordinates.getY();
-		if (y > 1) {
-			if (x > 1) {
-				neighbours.add(getCellAt(new Coordinates(x - 1, y - 1)));
-			}
-			neighbours.add(getCellAt(new Coordinates(x, y - 1)));
-			if (x < width) {
-				neighbours.add(getCellAt(new Coordinates(x + 1, y - 1)));
-			}
-		}
-		//middle row
-		if (x > 1) {
-			neighbours.add(getCellAt(new Coordinates(x - 1, y)));
-		}
-		if (x < width) {
-			neighbours.add(getCellAt(new Coordinates(x + 1, y)));
-		}
-		//bottom row
+		neighbours.addAll(topRow(x, y));
+		neighbours.addAll(middleRow(x, y));
+		neighbours.addAll(bottomRow(x, y));
+		return neighbours;
+	}
+
+	private List<Cell> bottomRow(int x, int y) {
+		List<Cell> neighbours = new ArrayList<Cell>();
 		if (y < height) {
 			if (x > 1) {
 				neighbours.add(getCellAt(new Coordinates(x - 1, y + 1)));
@@ -110,6 +100,31 @@ public class Board {
 			neighbours.add(getCellAt(new Coordinates(x, y + 1)));
 			if (x < width) {
 				neighbours.add(getCellAt(new Coordinates(x + 1, y + 1)));
+			}
+		}
+		return neighbours;
+	}
+
+	private List<Cell> middleRow(int x, int y) {
+		List<Cell> neighbours = new ArrayList<Cell>();
+		if (x > 1) {
+			neighbours.add(getCellAt(new Coordinates(x - 1, y)));
+		}
+		if (x < width) {
+			neighbours.add(getCellAt(new Coordinates(x + 1, y)));
+		}
+		return neighbours;
+	}
+
+	private List<Cell> topRow(int x, int y) {
+		List<Cell> neighbours = new ArrayList<Cell>();
+		if (y > 1) {
+			if (x > 1) {
+				neighbours.add(getCellAt(new Coordinates(x - 1, y - 1)));
+			}
+			neighbours.add(getCellAt(new Coordinates(x, y - 1)));
+			if (x < width) {
+				neighbours.add(getCellAt(new Coordinates(x + 1, y - 1)));
 			}
 		}
 		return neighbours;
@@ -126,11 +141,10 @@ public class Board {
 	}
 
 	public void open(Coordinates coordinates) {
-		System.out.println("opening " + coordinates.getX() + ", " + coordinates.getY());
 		getCellAt(coordinates).setStatus("open");
-		if (getNumberOfAdjacentPits(coordinates) == 0 && getCellAt(coordinates).getProperty() != CellProperty.PIT) {
+		if (getNumberOfAdjacentPits(coordinates) == 0
+				&& getCellAt(coordinates).getProperty() != CellProperty.PIT) {
 			for (Cell nb : getNeighboursOf(coordinates)) {
-				System.out.println("checking " + nb.getCoordinates().toString());
 				if ((nb.getStatus() == CellStatus.OPEN)) {
 					break;
 				}
